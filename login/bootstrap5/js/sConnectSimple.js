@@ -26,10 +26,6 @@ var sConnectSimple = (function () {
         var counter         = undefined; //refresh counter's id
         var timeUntilStatus = 20; //interval to refresh
         var refreshInterval = 20; //ditto
-        
-        var counter         = undefined; //refresh counter's id
-        var timeUntilStatus = 20; //interval to refresh
-        var refreshInterval = 20; //ditto
 
 	    var timeUntilUsage  = 20 //Default value
 	    var usageInterval	= 20; 
