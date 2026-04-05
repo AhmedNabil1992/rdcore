@@ -12,7 +12,7 @@ use Cake\ORM\TableRegistry;
 
 class VoucherGeneratorComponent extends Component {
 
-    private $nameType		= 'adjective_noun'; 
+    private $nameType		= 'randum_number'; //word_number_word_number, adjective_noun, random_number, random_alpha_numeric
     
     private $startNumber   = '00001';
 
@@ -240,13 +240,24 @@ class VoucherGeneratorComponent extends Component {
     }
 
 	private function _random_number(){
+		$VouchersTable = TableRegistry::get('Vouchers');
+
 		$duplicate_flag = true;
 		while($duplicate_flag){		
-			$v_value = rand ( 1000,999999);
-			if(!in_array("v_value", $this->voucherNames)){
-				$duplicate_flag = false; //Break the loop - we ar unique;
-				array_push($this->voucherNames, $v_value);
-			}
+			$v_value = rand ( 1000,99999999);
+			// if(!in_array("v_value", $this->voucherNames)){
+			// 	$duplicate_flag = false; //Break the loop - we ar unique;
+			// 	array_push($this->voucherNames, $v_value);
+			// }
+			$exists = $VouchersTable->find()
+                ->where(['name' => (string) $v_value])
+                ->count();
+
+            if (!$exists && !in_array($v_value, $this->voucherNames)) {
+                $duplicate_flag = false;
+                $this->voucherNames[] = $v_value;
+            }
+
 		}
 		return $v_value; //We are unique and we added ourselves to the existing list
 	}
