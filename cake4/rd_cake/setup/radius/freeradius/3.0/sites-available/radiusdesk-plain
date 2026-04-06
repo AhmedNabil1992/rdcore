@@ -19,6 +19,8 @@ server radiusdesk-plain {
 	    }
 	    
 	    files
+		sql           # <-- مهم جداً لتحميل radcheck/radreply
+	    expiration    # <-- لازم قبل pap
 	    pap
 
     }

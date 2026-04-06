@@ -271,6 +271,13 @@ listen {
 	}
 }
 
+#
+#  Instantiate modules
+#
+instantiate {
+	expiration
+}
+
 #  Authorization. First preprocess (hints and huntgroups files),
 #  then realms, and finally look in the "users" file.
 #
@@ -296,6 +303,15 @@ authorize {
         RADIUSdesk-Virtual-Server := "default"
     }	
     RADIUSdesk
+
+    #
+    #  Move Expiration from reply to check so expiration module can see it
+    #
+    if (&reply:Expiration) {
+        update request {
+            &Expiration := &reply:Expiration
+        }
+    }
 
 	#
 	#  Some broken equipment sends passwords with embedded zeros.
