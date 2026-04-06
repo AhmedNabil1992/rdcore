@@ -207,6 +207,50 @@ var sConnect = (function () {
       $("#alertWarn").addClass("show");
     };
 
+    var normalizeHotspotMessage = function (msg) {
+      if (msg === undefined || msg === null) {
+        return "";
+      }
+      return String(msg)
+        .trim()
+        .replace(/^["']|["']$/g, "")
+        .replace(/[.!?]+$/g, "")
+        .replace(/\s+/g, " ")
+        .toLowerCase();
+    };
+
+    var translateHotspotMessage = function (msg, fallbackMsg) {
+      fallbackMsg =
+        fallbackMsg || i18n("sAuthentication_failure_please_try_again");
+      if (msg === undefined || msg === null || msg === "") {
+        return fallbackMsg;
+      }
+
+      msg = String(msg).trim().replace(/^["']|["']$/g, "");
+
+      var translated = i18n(msg);
+      if (translated !== undefined) {
+        return translated;
+      }
+
+      if (
+        typeof Local !== "undefined" &&
+        Local.localizedStrings !== undefined &&
+        Local.localizedStrings !== null
+      ) {
+        var normalizedMsg = normalizeHotspotMessage(msg);
+        var keys = Object.keys(Local.localizedStrings);
+        for (var i = 0; i < keys.length; i++) {
+          var key = keys[i];
+          if (normalizeHotspotMessage(key) === normalizedMsg) {
+            return Local.localizedStrings[key];
+          }
+        }
+      }
+
+      return msg;
+    };
+
     var extractHotspotError = function (j, defaultMsg) {
       defaultMsg =
         defaultMsg || i18n("sAuthentication_failure_please_try_again");
@@ -240,6 +284,11 @@ var sConnect = (function () {
         msg = j.reason;
       } else {
         return defaultMsg;
+      }
+
+      msg = translateHotspotMessage(msg, defaultMsg);
+      if (msg !== defaultMsg && msg !== "" && msg !== undefined) {
+        return msg;
       }
 
       // Translate known messages

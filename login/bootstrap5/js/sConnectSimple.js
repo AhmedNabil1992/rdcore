@@ -120,6 +120,19 @@ var sConnectSimple = (function () {
             $('#alertWarn').addClass('show');
         }
 
+        var normalizeHotspotMessage = function(msg){
+            if((msg == undefined) || (msg == null)){
+                return '';
+            }
+
+            return String(msg)
+                .trim()
+                .replace(/^["']|["']$/g, '')
+                .replace(/[.!?]+$/g, '')
+                .replace(/\s+/g, ' ')
+                .toLowerCase();
+        }
+
         var translateHotspotMessage = function(msg){
             if((msg == undefined) || (msg == null)){
                 return i18n('sAuthentication_failure_please_try_again');
@@ -131,6 +144,17 @@ var sConnectSimple = (function () {
             var translated = i18n(msg);
             if(translated != undefined){
                 return translated;
+            }
+
+            if((typeof Local != 'undefined') && (Local.localizedStrings != undefined) && (Local.localizedStrings != null)){
+                var normalizedMsg = normalizeHotspotMessage(msg);
+                var keys = Object.keys(Local.localizedStrings);
+                for(var i = 0; i < keys.length; i++){
+                    var key = keys[i];
+                    if(normalizeHotspotMessage(key) === normalizedMsg){
+                        return Local.localizedStrings[key];
+                    }
+                }
             }
 
             if((msg.indexOf('Sorry... you have used your') > -1) && (msg.indexOf('data allowance') > -1)){
