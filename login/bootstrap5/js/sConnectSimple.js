@@ -118,6 +118,89 @@ var sConnectSimple = (function () {
             msg = '<div>'+msg+'</div>';
             $('#alertWarn').html(msg);
             $('#alertWarn').addClass('show');
+        }
+
+        var translateHotspotMessage = function(msg){
+            if((msg == undefined) || (msg == null)){
+                return i18n('sAuthentication_failure_please_try_again');
+            }
+
+            msg = String(msg).trim();
+            msg = msg.replace(/^["']|["']$/g, '');
+
+            var translated = i18n(msg);
+            if(translated != undefined){
+                return translated;
+            }
+
+            if((msg.indexOf('Sorry... you have used your') > -1) && (msg.indexOf('data allowance') > -1)){
+                if(msg.indexOf('all your') > -1){
+                    translated = i18n('Sorry... you have used all your data allowance');
+                }else{
+                    translated = i18n('Sorry... you have used your data allowance');
+                }
+                if(translated != undefined){
+                    return translated;
+                }
+            }
+
+            if(msg.indexOf('Account activate on') === 0){
+                translated = i18n('Account activate on');
+                if(translated != undefined){
+                    return translated + msg.substring('Account activate on'.length);
+                }
+            }
+
+            if(msg.indexOf('Missing Cleartext Password For') === 0){
+                translated = i18n('Missing Cleartext Password For');
+                if(translated != undefined){
+                    return translated + msg.substring('Missing Cleartext Password For'.length);
+                }
+            }
+
+            if(msg.indexOf('Simultaneous connections limited to') === 0){
+                translated = i18n('Simultaneous connections limited to');
+                if(translated != undefined){
+                    return translated + msg.substring('Simultaneous connections limited to'.length);
+                }
+            }
+
+            if(msg.indexOf('Not Available To Use On') > -1){
+                translated = i18n('Not Available To Use On');
+                if(translated != undefined){
+                    return translated + msg.substring(msg.indexOf('Not Available To Use On') + 'Not Available To Use On'.length);
+                }
+            }
+
+            if(msg.indexOf('reached') > -1){
+                var parts = msg.split(' of ');
+                translated = i18n('reached');
+                if((parts.length == 2) && (translated != undefined)){
+                    return parts[0]+' '+translated+' '+parts[1];
+                }
+            }
+
+            return msg;
+        }
+
+        var extractHotspotError = function(defaultMsg){
+            var candidates = [
+                getParameterByName('reply'),
+                getParameterByName('replyMessage'),
+                getParameterByName('message'),
+                getParameterByName('error_orig'),
+                getParameterByName('error'),
+                getParameterByName('reason')
+            ];
+
+            for(var i = 0; i < candidates.length; i++){
+                var item = candidates[i];
+                if((item != undefined) && (item !== '') && (item !== 'reject')){
+                    return translateHotspotMessage(item);
+                }
+            }
+
+            return defaultMsg || i18n('sAuthentication_failure_please_try_again');
         }      
                
         var onFrmLoginKeydown = function(event){
@@ -755,8 +838,7 @@ var sConnectSimple = (function () {
         var prelogin = function(){
             var res    = getParameterByName('res'); //res can be 'notyet', 'success', 'already'           
             if(res == 'failed'){
-                var reason    = getParameterByName('reason');
-                fShowError("Error "+reason+"<br>Please Try Again.....");
+                fShowError(extractHotspotError());
                 showConnect();
             }
                       

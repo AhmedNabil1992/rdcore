@@ -85,6 +85,12 @@ Ext.define('Rd.view.vouchers.winVoucherAdd', {
                                     labelClsExtra: 'lblRdReq'
                                 },
                                 {
+                                    xtype   : 'textfield',
+                                    name    : 'cloud_id',
+                                    hidden  : true,
+                                    value   : me.cloudId
+                                },
+                                {
                                     xtype       : 'textfield',
                                     name        : 'precede',
                                     fieldLabel  : i18n('sPrecede_string'),
