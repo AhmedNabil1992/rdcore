@@ -154,5 +154,22 @@ Local = {
     "Access denied": "تم رفض الوصول",
     "Invalid account": "حساب غير صالح",
     "Please try again later": "يرجى المحاولة لاحقًا",
+    "Sorry... you have used your data allowance":
+      "عذرًا... لقد استخدمت رصيد البيانات الخاص بك",
+    "Sorry... you have used all your data allowance":
+      "عذرًا... لقد استخدمت جميع رصيد البيانات الخاص بك",
+    "Maximum usage exceeded": "تم تجاوز الحد الأقصى للاستخدام",
+    "Account activate on": "سيتم تفعيل الحساب في",
+    "Denied access by rlm_perl function": "تم رفض الوصول بواسطة دالة rlm_perl",
+    "Required Request Attributes Missing": "بيانات الطلب المطلوبة مفقودة",
+    "Missing SSID in Called-Station-Id":
+      "اسم الشبكة SSID مفقود في Called-Station-Id",
+    "No PPSK Match Found": "لم يتم العثور على PPSK مطابق",
+    "Missing Cleartext Password For": "كلمة المرور الواضحة مفقودة لـ",
+    "Simultaneous connections limited to": "عدد الاتصالات المتزامنة محدود إلى",
+    "Sorry.. the router has reached its monthly data limit":
+      "عذرًا.. وصل الراوتر إلى الحد الشهري للبيانات",
+    "Not Available To Use On": "غير متاح للاستخدام على",
+    reached: "تم الوصول إلى",
   },
 };
