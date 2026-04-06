@@ -12,7 +12,7 @@ use Cake\ORM\TableRegistry;
 
 class VoucherGeneratorComponent extends Component {
 
-    private $nameType		= 'randum_number'; //word_number_word_number, adjective_noun, random_number, random_alpha_numeric
+    private $nameType		= 'random_number'; //word_number_word_number, adjective_noun, random_number, random_alpha_numeric
     
     private $startNumber   = '00001';
 
