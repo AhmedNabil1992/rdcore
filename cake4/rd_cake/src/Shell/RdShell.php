@@ -5,10 +5,13 @@
 
 namespace App\Shell;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\Console\ConsoleOptionParser;
 
 class RdShell extends Shell {
+
+    use ShellStatusLoggerTrait;
 
     public $tasks = ['Monitor','Debug','AutoClose','MonitorDynamic'];
 
@@ -18,30 +21,40 @@ class RdShell extends Shell {
 
             if ($this->params['heartbeat']) {
                 $this->Monitor->heartbeat();
+                $this->recordShellSuccess('rd mon');
                 return;
             }
 
             if ($this->params['ping']) {
                 $this->Monitor->ping();
+                $this->recordShellSuccess('rd mon');
                 return;
             }
 
             $this->Monitor->execute();
+            $this->recordShellSuccess('rd mon');
+            return;
         }
 
         //Check if a debug trace was started and stop it after timeout.
         if($this->args[0] == 'debug_check'){
-            $this->Debug->check();     
+            $this->Debug->check();
+            $this->recordShellSuccess('rd debug_check');
+            return;
         }
 
         //Check if a debug trace was started and stop it after timeout.
         if($this->args[0] == 'auto_close'){
-            $this->AutoClose->check();     
+            $this->AutoClose->check();
+            $this->recordShellSuccess('rd auto_close');
+            return;
         }
         
         //This is an informal addition to do on dynamic-client-states if there might be such a requirmement
         if($this->args[0] == 'mon_dynamic'){
-            $this->MonitorDynamic->execute();      
+            $this->MonitorDynamic->execute();
+            $this->recordShellSuccess('rd mon_dynamic');
+            return;
         }
          
     }

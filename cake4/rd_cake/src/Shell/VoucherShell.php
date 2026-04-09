@@ -5,12 +5,15 @@
 
 namespace App\Shell;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\I18n\Time;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\FrozenTime;
 
 class VoucherShell extends Shell {
+
+    use ShellStatusLoggerTrait;
 
     //This shell runs at longer intervals (15 min) to check for two things.
     //It checks all the new and used vouchers and then see if:
@@ -30,6 +33,8 @@ class VoucherShell extends Shell {
         foreach($qr as $i){
             $this->process_voucher($i->name);
         }
+
+        $this->recordShellSuccess('voucher');
     }
 
     private function process_voucher($name){

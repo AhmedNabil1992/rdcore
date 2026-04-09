@@ -1154,12 +1154,22 @@ RADIUSdesk_last_contact {
 
 RADIUSdesk_last_reject {
     #We do this regardless!
-    #Check if it is an EAP request; if PEAP the error message will not be set.
-    # http://freeradius.1045715.n5.nabble.com/Sending-Reply-Message-in-Access-Reject-PEAP-MSCHAPv2-td4421770.html
-    if(EAP-Message){
-        if(!&reply:Reply-Message){
+    # Ensure we always have a reason for reject so captive portals can display it.
+    if(!&reply:Reply-Message){
+        if(&Module-Failure-Message){
+            update reply {
+                Reply-Message := "%{Module-Failure-Message}"
+            }
+        }
+        elsif(EAP-Message){
+            # http://freeradius.1045715.n5.nabble.com/Sending-Reply-Message-in-Access-Reject-PEAP-MSCHAPv2-td4421770.html
             update reply {
                 Reply-Message := "Most likely PEAP failure. Run in debug"
+            }
+        }
+        else {
+            update reply {
+                Reply-Message := "Authentication failed"
             }
         }
     }

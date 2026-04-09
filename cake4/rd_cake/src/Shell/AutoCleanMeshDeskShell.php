@@ -4,6 +4,7 @@
 //cd /var/www/html/cake4/rd_cake && bin/cake auto_clean_mesh_desk
 
 namespace App\Shell;
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\I18n\FrozenTime;
 use Cake\I18n\Time;
@@ -11,6 +12,8 @@ use Cake\I18n\Time;
 
 
 class AutoCleanMeshDeskShell extends Shell {
+
+    use ShellStatusLoggerTrait;
 
     public function initialize():void{
         parent::initialize();
@@ -42,7 +45,9 @@ class AutoCleanMeshDeskShell extends Shell {
 		//--Delete TempReports if it is older than 30 minutes--;
 		$now        = new FrozenTime();
 		$hour_old	= $now->subMinute(30);
-		$this->TempReports->deleteAll(['TempReports.timestamp <' => $hour_old]);		
+        $this->TempReports->deleteAll(['TempReports.timestamp <' => $hour_old]);
+
+        $this->recordShellSuccess('auto_clean_mesh_desk');
     }
 }
 

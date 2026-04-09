@@ -17,12 +17,15 @@ namespace App\Shell;
 
 namespace App\Shell;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\I18n\Time;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\FrozenTime;
 
 class CompactingShell extends Shell{
+
+    use ShellStatusLoggerTrait;
 
     protected $start_date  = false;
     protected $end_date    = false;
@@ -39,6 +42,8 @@ class CompactingShell extends Shell{
         $this->out("<warning>MOST OF THIS function has been replaced by a trigger on the radacct table - Please apply the SQL patch if you have not yet</warning>");
         $this->out("<warning>Keep this script in CRON since we will replace it with a Command in CakePHP which acts as a drop in replacement to do some housekeeping</warning>");
         $this->out("<warning>BYE :-)</warning>");
+
+        $this->recordShellSuccess('compacting');
         return;
         
         $start_at = $this->_getStartAt();

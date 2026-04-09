@@ -5,6 +5,7 @@
 
 namespace App\Shell;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\Console\ConsoleOptionParser;
 
@@ -15,6 +16,8 @@ use Cake\I18n\Time;
 use Cake\Http\Client;
 
 class FupShell extends Shell {
+
+	use ShellStatusLoggerTrait;
 
 	protected $fupProfiles 	= [];
 	protected $timezone		= 'Africa/Johannesburg';
@@ -39,7 +42,9 @@ class FupShell extends Shell {
         	$this->testActiveConnections();
         }else{
         	$this->out("<info>No FUP Profiles - Exit</info>");
-        }                 
+		}
+
+		$this->recordShellSuccess('fup');
     }
       
     private function testActiveConnections(){    

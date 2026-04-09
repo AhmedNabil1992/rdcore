@@ -4,12 +4,15 @@
 
 namespace App\Shell;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\I18n\Time;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\FrozenTime;
 
 class UpdateUserStatsShell extends Shell{
+
+    use ShellStatusLoggerTrait;
 
     private $basicSection = 1200; //20 minutes
 
@@ -25,6 +28,8 @@ class UpdateUserStatsShell extends Shell{
         $this->out("<warning>THIS function has been replaced by a trigger on the radacct table - Please apply the SQL patch if you have not yet</warning>");
         $this->out("<warning>You can also remove this script from CRON</warning>");
         $this->out("<warning>BYE :-)</warning>");
+
+        $this->recordShellSuccess('update_user_stats');
         return;
     
         $this->out("-A- Start Updating User Stats");

@@ -5,6 +5,7 @@
 
 namespace App\Shell;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\Core\Configure;
@@ -12,6 +13,8 @@ use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\I18n\FrozenTime;
 
 class UpdateNodeDowntimeShell extends Shell{
+
+    use ShellStatusLoggerTrait;
 
     public function initialize():void{
         parent::initialize();
@@ -81,6 +84,8 @@ class UpdateNodeDowntimeShell extends Shell{
                  $this->_do_ap_uptm_history($ap_data);
             }             
         }
+
+        $this->recordShellSuccess('update_node_downtime');
     }
     
     private function _do_node_uptm_history($d){

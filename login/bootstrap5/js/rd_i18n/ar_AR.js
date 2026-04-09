@@ -171,5 +171,7 @@ Local = {
       "عذرًا.. وصل الراوتر إلى الحد الشهري للبيانات",
     "Not Available To Use On": "غير متاح للاستخدام على",
     reached: "تم الوصول إلى",
+    "User not registered": "المستخدم غير مسجل",
+    "The time for voucher is depleted": "تم استهلاك وقت الكارت",
   },
 };

@@ -4,12 +4,15 @@
 
 namespace App\Shell;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\I18n\Time;
 use Cake\Datasource\ConnectionManager;
 
 
 class UpdateNasDataUsageShell extends Shell{
+
+    use ShellStatusLoggerTrait;
 
     protected  $default_timezone   = 'UTC'; //Default for timezone
     protected  $timezone_lookup    = [];
@@ -26,6 +29,8 @@ class UpdateNasDataUsageShell extends Shell{
         $this->_prime_timezones();
         $this->_update_usage();
         $this->_update_daily_usage();
+
+        $this->recordShellSuccess('update_nas_data_usage');
     }
     
     private function _prime_timezones(){ 

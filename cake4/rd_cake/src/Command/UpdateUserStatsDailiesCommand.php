@@ -5,6 +5,7 @@
 
 namespace App\Command;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -12,6 +13,8 @@ use Cake\ORM\TableRegistry;
 use Cake\I18n\FrozenTime;
 
 class UpdateUserStatsDailiesCommand extends Command {
+
+    use ShellStatusLoggerTrait;
 
     protected $startDate      = null;
     protected $endDate        = null;
@@ -54,6 +57,7 @@ class UpdateUserStatsDailiesCommand extends Command {
         }else{
             $this->io->warning("user_stats table seems empty - nothing to port");
         }
+        $this->recordShellSuccess('update_user_stats_dailies');
         return static::CODE_SUCCESS;
     }
       

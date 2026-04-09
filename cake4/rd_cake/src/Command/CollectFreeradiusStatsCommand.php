@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Arguments;
 use Cake\Console\Command;
 use Cake\Console\ConsoleIo;
@@ -15,6 +16,8 @@ use Cake\I18n\FrozenTime;
 
 class CollectFreeradiusStatsCommand extends Command
 {
+    use ShellStatusLoggerTrait;
+
     protected const DEFAULT_TIMEOUT = 7; // seconds
 
     public static function defaultName(): string
@@ -202,6 +205,7 @@ class CollectFreeradiusStatsCommand extends Command
             return self::CODE_ERROR;
         }
 
+        $this->recordShellSuccess('freeradius:collect-stats');
         $io->success('OK: row id ' . $entity->id);
         return self::CODE_SUCCESS;
     }

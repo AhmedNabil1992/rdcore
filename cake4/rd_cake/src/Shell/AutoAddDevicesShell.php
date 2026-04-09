@@ -4,6 +4,7 @@
 //cd /var/www/html/cake4/rd_cake && bin/cake auto_add_devices
 
 namespace App\Shell;
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\Http\Client;
@@ -11,6 +12,8 @@ use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 
 class AutoAddDevicesShell extends Shell {
+
+    use ShellStatusLoggerTrait;
 
    
     public function initialize():void{
@@ -43,6 +46,8 @@ class AutoAddDevicesShell extends Shell {
         //Clear the table for the next lot
         $conn = ConnectionManager::get('default');   
         $conn->execute('TRUNCATE table auto_devices;');
+
+        $this->recordShellSuccess('auto_add_devices');
     }
 
     private function process_auto_device($mac,$username){

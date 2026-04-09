@@ -5,6 +5,7 @@
 
 namespace App\Shell;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
@@ -13,6 +14,8 @@ use Cake\I18n\Time;
 
 
 class OtpCleanupShell extends Shell {
+
+	use ShellStatusLoggerTrait;
 
 	protected $cut_off = 2; //Cut off two hours 
 
@@ -53,6 +56,8 @@ class OtpCleanupShell extends Shell {
 			}
 			$this->DataCollectorOtps->delete($otp);    
 		}
+
+		$this->recordShellSuccess('otp_cleanup');
 		 		              
     }
   	 	  	

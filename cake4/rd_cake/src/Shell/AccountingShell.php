@@ -5,12 +5,15 @@
 
 namespace App\Shell;
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Console\Shell;
 use Cake\I18n\Time;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\FrozenTime;
 
 class AccountingShell extends Shell {
+
+    use ShellStatusLoggerTrait;
 
     public function initialize():void{
         parent::initialize();
@@ -35,6 +38,8 @@ class AccountingShell extends Shell {
         //Clear the table for the next lot
         $conn = ConnectionManager::get('default');   
         $conn->execute('TRUNCATE table new_accountings;');
+
+        $this->recordShellSuccess('accounting');
     }
 
     private function process_username($username,$mac){

@@ -5,6 +5,7 @@ namespace App\Command;
 //as www-data
 //cd /var/www/rdcore/cake4/rd_cake && bin/cake permanent-users:sync-expiration >> /dev/null 2>&1
 
+use App\Utility\ShellStatusLoggerTrait;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -15,6 +16,8 @@ use Cake\Controller\ComponentRegistry;
 use App\Controller\Component\IspPlumbingComponent;
 
 class SyncUserExpirationCommand extends Command {
+
+    use ShellStatusLoggerTrait;
 
     protected $IspPlumbing;
 
@@ -32,7 +35,7 @@ class SyncUserExpirationCommand extends Command {
         $this->loadModel('PermanentUsers');
     }
 
-    public function execute(Arguments $args, ConsoleIo $io){
+    public function execute(Arguments $args, ConsoleIo $io): int{
     
         //== FIXME Change to match your timezone ===
         $tz  = new \DateTimeZone('Africa/Lagos');
@@ -82,6 +85,9 @@ class SyncUserExpirationCommand extends Command {
 
         $io->out("Expired users updated: {$expiredCount}");
         $io->out("Reactivated users updated: {$reactivatedCount}");
+
+        $this->recordShellSuccess('permanent-users:sync-expiration');
+        return static::CODE_SUCCESS;
     }
 }
 

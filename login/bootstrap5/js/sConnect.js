@@ -226,7 +226,9 @@ var sConnect = (function () {
         return fallbackMsg;
       }
 
-      msg = String(msg).trim().replace(/^["']|["']$/g, "");
+      msg = String(msg)
+        .trim()
+        .replace(/^["']|["']$/g, "");
 
       var translated = i18n(msg);
       if (translated !== undefined) {
@@ -259,6 +261,25 @@ var sConnect = (function () {
       }
       var msg = "";
       if (
+        typeof j.reply !== "undefined" &&
+        j.reply !== null &&
+        j.reply !== "" &&
+        j.reply !== "reject"
+      ) {
+        msg = j.reply;
+      } else if (
+        typeof j.replyMessage !== "undefined" &&
+        j.replyMessage !== null &&
+        j.replyMessage !== ""
+      ) {
+        msg = j.replyMessage;
+      } else if (
+        typeof j.reply_message !== "undefined" &&
+        j.reply_message !== null &&
+        j.reply_message !== ""
+      ) {
+        msg = j.reply_message;
+      } else if (
         typeof j.error_orig !== "undefined" &&
         j.error_orig !== null &&
         j.error_orig !== ""
@@ -351,6 +372,26 @@ var sConnect = (function () {
         var parts = msg.split(" of ");
         if (parts.length === 2) {
           return parts[0] + " " + i18n("reached") + " " + parts[1];
+        }
+      }
+
+      var userNotRegisteredMatch = msg.match(
+        /^User\s+(.+?)\s+not\s+registered$/i,
+      );
+      if (userNotRegisteredMatch) {
+        translated = i18n("User not registered");
+        if (translated !== undefined) {
+          return translated + ": " + userNotRegisteredMatch[1];
+        }
+      }
+
+      var voucherDepletedMatch = msg.match(
+        /^The\s+time\s+for\s+voucher\s+(.+?)\s+is\s+depleted$/i,
+      );
+      if (voucherDepletedMatch) {
+        translated = i18n("The time for voucher is depleted");
+        if (translated !== undefined) {
+          return translated + ": " + voucherDepletedMatch[1];
         }
       }
 
